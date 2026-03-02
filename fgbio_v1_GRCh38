@@ -1,0 +1,643 @@
+
+# INPUT DATA -> forward and backward read
+# BATCH=batch_a001
+# TARGET=/data/lied_liquidbiopsy
+# PREFIX=liqbio_GRCh38_
+# FQDIR=$TARGET/002_fastq/$BATCH/
+# AF_THR=0.0005
+
+# SAMPLEID=gn_L_2024_0044
+# FASTQR1=$TARGET/002_fastq/$BATCH/"240900000134-C04-DS_24Sep134-C04_S36_L002_R1_001.fastq.gz"
+# FASTQR2=$TARGET/002_fastq/$BATCH/"240900000134-C04-DS_24Sep134-C04_S36_L002_R2_001.fastq.gz"
+
+# SAMPLEID=gt_P_2023_0001
+# FASTQR1=$TARGET/002_fastq/$BATCH/"230900000748-DS_23Sep748_S1_L001_R1_001.fastq.gz"
+# FASTQR2=$TARGET/002_fastq/$BATCH/"230900000748-DS_23Sep748_S1_L001_R2_001.fastq.gz"
+
+ID=$SAMPLEID
+
+echo $ID
+echo $TARGET
+
+cd $TARGET
+mkdir -p $ID
+cd $ID
+
+# sleep 60
+
+# SET PATH, PROCESSES
+SOURCEPATH=$(pwd -LP)
+export TMPDIR=$SCRATCH/tmp; mkdir -p $TMPDIR
+
+RESULTS=$TARGET/003_results
+
+THREADS=$(nproc)
+
+# PROGRAMS
+FGBIO=$TARGET/001_resources/fgbio-2.4.0.jar
+FASTP=$TARGET/001_resources/fastp_0.24.0
+BWA=$TARGET/001_resources/bwa_mem2/bwa-mem2
+GATK=$TARGET/001_resources/gatk-4.5.0.0/gatk
+PICARD=$TARGET/001_resources/picard.2.27.5.jar
+SVICT=$TARGET/001_resources/svict
+
+VEP=$TARGET/001_resources/vep.111-GRCh38_minimal.sif
+VCF2MAF=$TARGET/001_resources/vcf2maf-1.6.22
+SAMTOOLS=/usr/bin/samtools
+BCFTOOLS=$TARGET/001_resources/bcftools-1.19/bcftools
+FACTERA=$TARGET/001_resources/factera/factera.pl
+
+VARDICT=$TARGET/001_resources/VarDict-1.8.3/bin
+#AF_THR="0.0025" # minimum allele frequency for VarDict 0.25%
+#AF_THR="0.0005" # minimum allele frequency for VarDict 0.05%
+
+# FASTAs, INDEX, ANNOTATIONS
+BWA2INDEX=$TARGET/001_resources/BWAmem2Index/Homo_sapiens_assembly38.fasta
+REFERENCE=$TARGET/001_resources/WholeGenomeFasta/Homo_sapiens_assembly38.fasta
+DICT=$TARGET/001_resources/WholeGenomeFasta/Homo_sapiens_assembly38.dict
+FAI=$TARGET/001_resources/WholeGenomeFasta/Homo_sapiens_assembly38.fasta.fai
+GENESGTF=$TARGET/001_resources/genes_GRCh38.gtf
+GENESBED=$TARGET/001_resources/genes_GRCh38.bed
+TWOBIT=$TARGET/001_resources/hg38.2bit
+
+ANNOPATH=/data/lied_kuenstner/vep/annotations_GRCh38
+
+BEDFILE=$TARGET/001_resources/UCCSH_NGS_panel_v1.0/UCCSH_NGS_GRCh38.bed
+# Interval list in Picard-style: NAME.interval_list
+REGIONLIST=uccsh_panel_grch38.interval_list
+
+# Reference Variant Files
+# All data are based on GRCh38
+# http://gnomad.broadinstitute.org
+GERMLINE=$TARGET/001_resources/af-only-gnomad.hg38.vcf.gz
+PON=$TARGET/001_resources/1000g_pon.hg38.vcf.gz
+DBSNP=$TARGET/001_resources/dbsnp_146.hg38.vcf.gz
+EXAC=$TARGET/001_resources/small_exac_common_3.hg38.vcf.gz
+
+# FURTHER VARIABLES
+CENTER="UzL"
+GENOME="GRCh38"
+
+MAXCAPCOVERAGE=200000
+# MINFAMSIZE=2
+
+mkdir $SOURCEPATH/_data_export
+mkdir $SOURCEPATH/00_fastq
+mkdir $SOURCEPATH/01_processing
+mkdir $SOURCEPATH/02_variants
+mkdir $SOURCEPATH/04_structural_variants
+mkdir $SOURCEPATH/05_fusions
+
+# ln -s $FASTQR1 $SOURCEPATH/00_fastq/data_R1.fq.gz
+# ln -s $FASTQR2 $SOURCEPATH/00_fastq/data_R2.fq.gz
+
+echo 'START - Merge fastqs...'
+cat $FASTQR1a $FASTQR1b > $SOURCEPATH/00_fastq/data_R1.fq.gz 
+cat $FASTQR2a $FASTQR2b > $SOURCEPATH/00_fastq/data_R2.fq.gz 
+echo '...Merge fastqs - END'
+echo 'Start working on '$ID
+
+####
+#
+# 00. Prepare interval list for variant calling
+#
+java -jar $PICARD BedToIntervalList \
+      I=$BEDFILE \
+      O=$REGIONLIST \
+      SD=$DICT 
+
+####
+#
+# 1. Prepare sequencing reads
+# SureSelect XT HS2 read structure: 3M2S+T 3M2S+T (1-2 dark bases: 2S)
+#
+
+java -Djava.io.tmpdir=$TMPDIR \
+    -jar $PICARD FastqToSam \
+    FASTQ=$SOURCEPATH/00_fastq/data_R1.fq.gz \
+    FASTQ2=$SOURCEPATH/00_fastq/data_R2.fq.gz \
+    O=$SOURCEPATH/00_fastq/unmapped.bam \
+    SM=$SAMPLEID
+
+java -jar $FGBIO ExtractUmisFromBam \
+    --input=00_fastq/unmapped.bam \
+    --output=00_fastq/unmapped.UMI.bam \
+    --read-structure 3M2S+T 3M2S+T \
+    --molecular-index-tags=ZA ZB --single-tag=RX 
+
+java -jar $PICARD SamToFastq \
+    INPUT=$SOURCEPATH/00_fastq/unmapped.UMI.bam \
+    FASTQ=$SOURCEPATH/00_fastq/reads_R1.fastq \
+    SECOND_END_FASTQ=$SOURCEPATH/00_fastq/reads_R2.fastq
+
+gzip $SOURCEPATH/00_fastq/reads_R1.fastq
+gzip $SOURCEPATH/00_fastq/reads_R2.fastq
+
+####
+#
+# 2. fastp quality filtering after UMI extraction
+#
+
+echo '### Start fastp'
+
+$FASTP \
+    -i $SOURCEPATH/00_fastq/reads_R1.fastq.gz \
+    -I $SOURCEPATH/00_fastq/reads_R2.fastq.gz \
+    -o $SOURCEPATH/00_fastq/trimmed.reads_R1.fastq.gz \
+    -O $SOURCEPATH/00_fastq/trimmed.reads_R2.fastq.gz \
+    --adapter_sequence=AGATCGGAAGAGCACACGTCTGAACTCCAGTCA \
+    --adapter_sequence_r2=AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT \
+    --json=$SOURCEPATH/00_fastq/fastp.json \
+    --html=$SOURCEPATH/00_fastq/fastp.html \
+    --thread $THREADS
+
+####
+#
+# 3. map reads bwa-mem2
+#
+
+$BWA mem -t $THREADS \
+    $BWA2INDEX \
+    $SOURCEPATH/00_fastq/trimmed.reads_R1.fastq.gz \
+    $SOURCEPATH/00_fastq/trimmed.reads_R2.fastq.gz > 00_fastq/mapped.sam
+
+####
+#
+# 4. Sort Sam -> output: bam + idx 
+# Sorts according to the readname
+# unmapped data already in correct order
+
+java -XX:+UseParallelGC -XX:ParallelGCThreads=4 -jar $PICARD SortSam \
+    I=$SOURCEPATH/00_fastq/mapped.sam \
+    O=$SOURCEPATH/00_fastq/mapped.sorted.bam \
+    SORT_ORDER=queryname \
+    CREATE_INDEX=true
+
+java -XX:+UseParallelGC -XX:ParallelGCThreads=4 -jar $PICARD MergeBamAlignment \
+        UNMAPPED=$SOURCEPATH/00_fastq/unmapped.UMI.bam \
+        ALIGNED=$SOURCEPATH/00_fastq/mapped.sorted.bam \
+        O=$SOURCEPATH/01_processing/mapped.merged.bam \
+        R=$REFERENCE \
+       	SO=coordinate \
+       	ALIGNER_PROPER_PAIR_FLAGS=true \
+       	MAX_GAPS=-1 \
+       	ORIENTATIONS=FR \
+       	VALIDATION_STRINGENCY=LENIENT \
+       	CREATE_INDEX=true \
+       	ATTRIBUTES_TO_RETAIN=RX \
+       	UNMAP_CONTAMINANT_READS=false \
+       	CLIP_OVERLAPPING_READS=true \
+        INCLUDE_SECONDARY_ALIGNMENTS=false \
+        ADD_MATE_CIGAR=true \
+        CLIP_ADAPTERS=false
+
+$SAMTOOLS flagstat $SOURCEPATH/01_processing/mapped.merged.bam > $SOURCEPATH/_data_export/01_stats_mapping.txt
+
+java -XX:+UseParallelGC -XX:ParallelGCThreads=4 -jar $PICARD CollectTargetedPcrMetrics \
+	I=$SOURCEPATH/01_processing/mapped.merged.bam \
+	O=$SOURCEPATH/_data_export/01_pcr_metrics.txt COVERAGE_CAP=$MAXCAPCOVERAGE \
+	R=$REFERENCE TARGET_INTERVALS=$REGIONLIST AMPLICON_INTERVALS=$REGIONLIST
+
+####
+#
+# 5. Error correction by collapsing single read families (mark dups)
+#
+
+# sort by coordinates
+java -XX:+UseParallelGC -XX:ParallelGCThreads=4 -jar $PICARD SortSam \
+	I=$SOURCEPATH/01_processing/mapped.merged.bam \
+	O=$SOURCEPATH/01_processing/mapped.merged.sortedCoord.bam \
+	SORT_ORDER=coordinate CREATE_INDEX=true
+
+# Mark duplicates
+java -XX:+UseParallelGC -XX:ParallelGCThreads=4 -jar $PICARD MarkDuplicates \
+    I=$SOURCEPATH/01_processing/mapped.merged.sortedCoord.bam \
+    O=$SOURCEPATH/01_processing/mapped.markeddup.bam \
+    BARCODE_TAG=RX \
+    DUPLICATE_SCORING_STRATEGY=SUM_OF_BASE_QUALITIES \
+    DUPLEX_UMI=true \
+    M=$SOURCEPATH/01_processing/markduplicates.metrics.txt \
+    REMOVE_DUPLICATES=true \
+    CREATE_INDEX=true
+
+$SAMTOOLS flagstat $SOURCEPATH/01_processing/mapped.markeddup.bam > $SOURCEPATH/_data_export/02_stats_dup.txt
+
+java -XX:+UseParallelGC -XX:ParallelGCThreads=4 -jar $PICARD CollectTargetedPcrMetrics \
+	I=$SOURCEPATH/01_processing/mapped.markeddup.bam \
+	O=$SOURCEPATH/_data_export/02_pcr_metrics.txt COVERAGE_CAP=$MAXCAPCOVERAGE \
+	R=$REFERENCE TARGET_INTERVALS=$REGIONLIST AMPLICON_INTERVALS=$REGIONLIST
+
+####
+#
+# 6. Error correction by collapsing single read families
+#
+
+# 6.1 Group read families
+java -jar $FGBIO GroupReadsByUmi \
+    --input=$SOURCEPATH/01_processing/mapped.merged.sortedCoord.bam \
+    --output=$SOURCEPATH/01_processing/mapped.families.bam \
+    --strategy=paired \
+    --edits=0 \
+    --min-map-q=20 \
+    --threads=$THREADS \
+    --family-size-histogram=$SOURCEPATH/_data_export/family_size_hist.txt
+    
+# 6.2 Collapse single read families
+java -jar $FGBIO CallMolecularConsensusReads \
+    --input=$SOURCEPATH/01_processing/mapped.families.bam \
+    --output=$SOURCEPATH/01_processing/consensus.unmapped.bam \
+    --error-rate-pre-umi=45 \
+    --error-rate-post-umi=30 \
+    --min-consensus-base-quality=2 \
+    --min-input-base-quality=10 \
+    --min-reads=$MINFAMSIZE
+
+# 6.3 Align collapsed families
+java -jar $PICARD SamToFastq \
+    INPUT=$SOURCEPATH/01_processing/consensus.unmapped.bam \
+    FASTQ=$SOURCEPATH/01_processing/consensus_R1.fastq \
+    SECOND_END_FASTQ=$SOURCEPATH/01_processing/consensus_R2.fastq
+gzip $SOURCEPATH/01_processing/*.fastq
+
+$BWA mem -t $THREADS \
+    $BWA2INDEX \
+    $SOURCEPATH/01_processing/consensus_R1.fastq.gz \
+    $SOURCEPATH/01_processing/consensus_R2.fastq.gz > $SOURCEPATH/01_processing/consensus.mapped.sam
+
+java -XX:+UseParallelGC -XX:ParallelGCThreads=4 -jar $PICARD SortSam \
+    I=$SOURCEPATH/01_processing/consensus.unmapped.bam \
+    O=$SOURCEPATH/01_processing/consensus.unmapped.queryname.bam \
+    SORT_ORDER=queryname
+
+java -XX:+UseParallelGC -XX:ParallelGCThreads=4 -jar $PICARD SortSam \
+    I=$SOURCEPATH/01_processing/consensus.mapped.sam \
+    O=$SOURCEPATH/01_processing/consensus.mapped.queryname.bam \
+    SORT_ORDER=queryname
+
+java -XX:+UseParallelGC -XX:ParallelGCThreads=4 -jar $PICARD MergeBamAlignment \
+        UNMAPPED=$SOURCEPATH/01_processing/consensus.unmapped.queryname.bam \
+        ALIGNED=$SOURCEPATH/01_processing/consensus.mapped.queryname.bam \
+        O=$SOURCEPATH/01_processing/consensus.mapped.merged.bam \
+        R=$REFERENCE \
+       	SORT_ORDER=queryname \
+       	ALIGNER_PROPER_PAIR_FLAGS=true \
+       	MAX_GAPS=-1 \
+       	ORIENTATIONS=FR \
+       	VALIDATION_STRINGENCY=LENIENT \
+       	CREATE_INDEX=true \
+       	ATTRIBUTES_TO_RETAIN=RX \
+       	UNMAP_CONTAMINANT_READS=false \
+       	INCLUDE_SECONDARY_ALIGNMENTS=false \
+       	CLIP_ADAPTERS=false \
+        ADD_MATE_CIGAR=true 
+       	
+# 6.4 Filter collapsed families
+java -jar $FGBIO FilterConsensusReads \
+    --input=$SOURCEPATH/01_processing/consensus.mapped.merged.bam \
+    --output=$SOURCEPATH/01_processing/consensus.mapped.merged.filtered.bam \
+    --ref=$REFERENCE \
+    --min-reads=$MINFAMSIZE \
+    --max-read-error-rate=0.05 \
+    --max-base-error-rate=0.1 \
+    --min-base-quality=2 \
+    --max-no-call-fraction=0.1
+
+# some stats
+java -jar $FGBIO CollectDuplexSeqMetrics \
+    --input=$SOURCEPATH/01_processing/mapped.families.bam \
+    --output=$SOURCEPATH/_data_export/duplex_metrics \
+    --description="UMI_metrics"
+
+# Get consensus metrics after collapsing
+java -jar $PICARD CollectTargetedPcrMetrics \
+    I=$SOURCEPATH/01_processing/consensus.mapped.merged.filtered.bam \
+    O=$SOURCEPATH/_data_export/03_consensus_pcr_metrics.txt \
+    R=$REFERENCE \
+    TARGET_INTERVALS=$REGIONLIST \
+    AMPLICON_INTERVALS=$REGIONLIST \
+    COVERAGE_CAP=$MAXCAPCOVERAGE
+
+####
+#
+# 7. Clip overlap between fw and rev read pairs
+#
+
+# Mark duplicated bam
+java -XX:+UseParallelGC -XX:ParallelGCThreads=4 -jar $PICARD SortSam \
+	I=$SOURCEPATH/01_processing/mapped.markeddup.bam \
+	O=$SOURCEPATH/01_processing/mapped.markeddup.query.bam \
+	SORT_ORDER=queryname CREATE_INDEX=true
+
+java -jar $FGBIO ClipBam \
+    --input=$SOURCEPATH/01_processing/mapped.markeddup.query.bam\
+    --output=$SOURCEPATH/02_variants/liqid_biopsy.MD.final.bam \
+    --ref=$REFERENCE \
+    --clip-overlapping-reads=true \
+    --sort-order=Coordinate
+
+# java -jar $PICARD BuildBamIndex \
+#     I=$SOURCEPATH/02_variants/liqid_biopsy.MD.final.bam \
+#     O=$SOURCEPATH/02_variants/liqid_biopsy.MD.final.bai
+
+java -jar $PICARD ValidateSamFile \
+    I=$SOURCEPATH/02_variants/liqid_biopsy.MD.final.bam \
+    MODE=SUMMARY \
+    REFERENCE_SEQUENCE=$REFERENCE
+
+# Consensus called families
+java -jar $FGBIO ClipBam \
+    --input=$SOURCEPATH/01_processing/consensus.mapped.merged.filtered.bam \
+    --output=$SOURCEPATH/02_variants/liqid_biopsy.final.bam \
+    --ref=$REFERENCE \
+    --clip-overlapping-reads=true \
+    --sort-order=Coordinate
+
+# java -jar $PICARD BuildBamIndex \
+# 	I=$SOURCEPATH/02_variants/liqid_biopsy.final.bam \
+# 	O=$SOURCEPATH/02_variants/liqid_biopsy.final.bai
+
+java -jar $PICARD ValidateSamFile \
+    I=$SOURCEPATH/02_variants/liqid_biopsy.final.bam \
+    MODE=SUMMARY \
+    REFERENCE_SEQUENCE=$REFERENCE
+
+####
+#
+# 8. Replace Read Groups
+#
+#java -jar $PICARD AddOrReplaceReadGroups \
+#	I=$SOURCEPATH/02_variants/liqid_biopsy.final.bam \
+#	O=$SOURCEPATH/02_variants/liqid_biopsy.final.rg.bam \
+#	RGID=$ID RGPL=illumina RGLB=$ID RGPU=unit1 RGSM=TUMOR CREATE_INDEX=true
+
+####
+#
+# 9. On target rates and Insert sizes
+#
+
+# Calculated on-target rate
+java -jar $PICARD CollectTargetedPcrMetrics \
+	I=$SOURCEPATH/02_variants/liqid_biopsy.final.bam \
+	O=$SOURCEPATH/_data_export/04_pcr_metrics.txt COVERAGE_CAP=$MAXCAPCOVERAGE \
+	R=$REFERENCE TARGET_INTERVALS=$REGIONLIST AMPLICON_INTERVALS=$REGIONLIST
+
+$GATK CollectInsertSizeMetrics \
+	    -I $SOURCEPATH/02_variants/liqid_biopsy.final.bam \
+	    -O $SOURCEPATH/_data_export/04_stats.insert.txt \
+	    -H $SOURCEPATH/_data_export/04_stats.insert.pdf \
+	    -INCLUDE_DUPLICATES true
+
+java -jar $PICARD CollectTargetedPcrMetrics \
+	I=$SOURCEPATH/02_variants/liqid_biopsy.MD.final.bam \
+	O=$SOURCEPATH/_data_export/05_pcr_metrics.txt COVERAGE_CAP=$MAXCAPCOVERAGE \
+	R=$REFERENCE TARGET_INTERVALS=$REGIONLIST AMPLICON_INTERVALS=$REGIONLIST
+
+$GATK CollectInsertSizeMetrics \
+	    -I $SOURCEPATH/02_variants/liqid_biopsy.MD.final.bam \
+	    -O $SOURCEPATH/_data_export/05_stats.insert.txt \
+	    -H $SOURCEPATH/_data_export/05_stats.insert.pdf \
+	    -INCLUDE_DUPLICATES true
+
+# FINALBAM=$SOURCEPATH/02_variants/liqid_biopsy.fixed.dup.rg.bam
+FINALBAM=$SOURCEPATH/02_variants/liqid_biopsy.final.bam
+
+####
+#
+# 10. VarDict variant calling
+#
+
+# https://github.com/AstraZeneca-NGS/VarDictJava
+
+echo '######## Step VarDict'
+
+$VARDICT/VarDict -G $REFERENCE \
+	-f $AF_THR \
+	-N TUMOR \
+	-b $FINALBAM \
+	-z -c 1 -S 2 -E 3 -g 4 $BEDFILE \
+	--nosv --deldupvar \
+	-th $THREADS | $VARDICT/teststrandbias.R | $VARDICT/var2vcf_valid.pl \
+	-N TUMOR -E -f $AF_THR > $SOURCEPATH/02_variants/VarDict.variants.vcf
+
+$GATK SelectVariants -V $SOURCEPATH/02_variants/VarDict.variants.vcf \
+ 	-O $SOURCEPATH/02_variants/VarDict.variants.filtered.vcf --exclude-filtered TRUE
+ 	
+$GATK LeftAlignAndTrimVariants -R $REFERENCE \
+	-V $SOURCEPATH/02_variants/VarDict.variants.filtered.vcf \
+	-O $SOURCEPATH/02_variants/VarDict.variants.filtered.leftaligned.vcf
+
+singularity exec $VEP vep \
+	--dir $ANNOPATH/../vep_data \
+	--offline --cache \
+	--assembly GRCh38 \
+	--fork 4 \
+	--input_file  $SOURCEPATH/02_variants/VarDict.variants.filtered.leftaligned.vcf \
+	--output_file $SOURCEPATH/02_variants/vep.VarDict.vcf \
+	--vcf \
+	--species homo_sapiens \
+	--force_overwrite \
+	--symbol \
+	--numbers \
+	--regulatory \
+	--canonical \
+	--gene_phenotype \
+	--af \
+	--max_af \
+	--af_gnomad \
+	--pubmed \
+	--allele_number \
+	--mane --hgvs  \
+	--plugin AlphaMissense,file=$ANNOPATH/AlphaMissense_hg38.tsv.gz \
+	--plugin CADD,$ANNOPATH/CADD1.6.GRCh38/whole_genome_SNVs.tsv.gz \
+	--plugin dbNSFP,$ANNOPATH/dbNSFP4.4c_grch38.gz,DANN_score \
+	--custom $ANNOPATH/gnomad.genomes.r3.0.sites.vcf.bgz,gnomADg,vcf,exact,0,AF_afr,AF_amr,AF_asj,AF_eas,AF_fin,AF_nfe,AF_oth \
+	--custom $ANNOPATH/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.bgz,gnomADe,vcf,exact,0,AF_afr,AF_amr,AF_asj,AF_eas,AF_fin,AF_nfe,AF_oth,AF_popmax \
+	--no_stats --quiet
+
+$VCF2MAF/vcf2maf.pl \
+	--inhibit-vep \
+	--input-vcf $SOURCEPATH/02_variants/vep.VarDict.vcf \
+	--output-maf $SOURCEPATH/02_variants/vep.VarDict.MAF \
+	--verbose --ref-fasta $REFERENCE \
+	--maf-center $CENTER --ncbi-build $GENOME \
+	--tumor-id TUMOR \
+	--retain-ann am_class,am_pathogenicity,CADD_PHRED,DANN_score,MAX_AF,gnomADg_AF_afr,gnomADg_AF_amr,gnomADg_AF_asj,gnomADg_AF_eas,gnomADg_AF_fin,gnomADg_AF_nfe,gnomADg_AF_oth,gnomADe_AF_afr,gnomADe_AF_amr,gnomADe_AF_asj,gnomADe_AF_eas,gnomADe_AF_fin,gnomADe_AF_nfe,gnomADe_AF_oth,gnomADe_AF_popmax,MANE_SELECT,MANE_PLUS_CLINICAL,AF
+
+gzip $SOURCEPATH/02_variants/vep.VarDict.MAF
+mv $SOURCEPATH/02_variants/vep.VarDict.MAF.gz $SOURCEPATH/_data_export
+
+####
+#
+# 11. Call somatic short variants using Mutect2 and filter calls
+#
+
+# https://gdc.cancer.gov/content/mutect2-insertion-artifacts
+
+$GATK --java-options "-Xmx48g -Djava.io.tmpdir="$TMPDIR" -DGATK_STACKTRACE_ON_USER_EXCEPTION=true -XX:ParallelGCThreads="$THREADS Mutect2 \
+        -R $REFERENCE \
+        -I $FINALBAM \
+        --f1r2-tar-gz $SOURCEPATH/02_variants/f1r2.NG_PT.tar.gz \
+        --panel-of-normals $PON \
+        --germline-resource $GERMLINE \
+        --output $SOURCEPATH/02_variants/mutect2.variants.vcf \
+        --native-pair-hmm-threads $THREADS -L $SOURCEPATH/$REGIONLIST \
+        --dont-use-soft-clipped-bases true 
+#        --disable-adaptive-pruning true \
+#        --initial-tumor-lod 1.0 --tumor-lod-to-emit 1.0
+
+$GATK LearnReadOrientationModel -I $SOURCEPATH/02_variants/f1r2.NG_PT.tar.gz \
+	-O $SOURCEPATH/02_variants/read-orientation-model.tar.gz
+
+$GATK --java-options "-Xmx48g" GetPileupSummaries \
+	-I $FINALBAM  \
+	-L $EXAC -V $EXAC \
+	-O $SOURCEPATH/02_variants/liqid_biopsy.final.getpileupsummaries.table
+
+# --> we know to suspect calls with less than ~1% alternate allele fraction.
+$GATK --java-options "-Xmx48g" CalculateContamination \
+        -I $SOURCEPATH/02_variants/liqid_biopsy.final.getpileupsummaries.table \
+        -O $SOURCEPATH/02_variants/calculatecontamination.table
+
+$GATK --java-options "-Xmx48g" FilterMutectCalls -R $REFERENCE \
+	-V $SOURCEPATH/02_variants/mutect2.variants.vcf \
+	--contamination-table $SOURCEPATH/02_variants/calculatecontamination.table \
+	--ob-priors $SOURCEPATH/02_variants/read-orientation-model.tar.gz \
+	-O $SOURCEPATH/02_variants/mutect2.variants.filtered.vcf
+
+# select PASS -> keep all variants and filter later
+# $GATK SelectVariants -V $SOURCEPATH/02_variants/mutect2.variants.filtered.vcf \
+# 	-O $SOURCEPATH/02_variants/mutect2.variants.filtered.PASS.vcf --exclude-filtered TRUE
+# $BCFTOOLS filter -i 'FILTER="PASS" | FILTER="germline"' \
+# 	$SOURCEPATH/02_variants/mutect2.variants.filtered.vcf > $SOURCEPATH/02_variants/mutect2.variants.filtered.PASS.vcf
+
+# leftalign variants
+$GATK LeftAlignAndTrimVariants -R $REFERENCE \
+	-V $SOURCEPATH/02_variants/mutect2.variants.filtered.vcf \
+	-O $SOURCEPATH/02_variants/mutect2.variants.filtered.leftaligned.vcf
+
+# VEP
+singularity exec $VEP vep \
+	--dir $ANNOPATH/../vep_data \
+	--offline --cache \
+	--assembly GRCh38 \
+	--fork 4 \
+	--input_file  $SOURCEPATH/02_variants/mutect2.variants.filtered.leftaligned.vcf \
+	--output_file $SOURCEPATH/02_variants/vep.mutect2.variants.vcf \
+	--vcf \
+	--species homo_sapiens \
+	--force_overwrite \
+	--symbol \
+	--numbers \
+	--regulatory \
+	--canonical \
+	--gene_phenotype \
+	--af \
+	--max_af \
+	--af_gnomad \
+	--pubmed \
+	--allele_number \
+	--mane --hgvs  \
+	--plugin AlphaMissense,file=$ANNOPATH/AlphaMissense_hg38.tsv.gz \
+	--plugin CADD,$ANNOPATH/CADD1.6.GRCh38/whole_genome_SNVs.tsv.gz \
+	--plugin dbNSFP,$ANNOPATH/dbNSFP4.4c_grch38.gz,DANN_score \
+	--custom $ANNOPATH/gnomad.genomes.r3.0.sites.vcf.bgz,gnomADg,vcf,exact,0,AF_afr,AF_amr,AF_asj,AF_eas,AF_fin,AF_nfe,AF_oth \
+	--custom $ANNOPATH/gnomad.exomes.r2.1.1.sites.liftover_grch38.vcf.bgz,gnomADe,vcf,exact,0,AF_afr,AF_amr,AF_asj,AF_eas,AF_fin,AF_nfe,AF_oth,AF_popmax \
+	--no_stats --quiet
+
+$VCF2MAF/vcf2maf.pl \
+	--inhibit-vep \
+	--input-vcf $SOURCEPATH/02_variants/vep.mutect2.variants.vcf \
+	--output-maf $SOURCEPATH/02_variants/vep.mutect2.MAF \
+	--verbose --ref-fasta $REFERENCE \
+	--maf-center $CENTER --ncbi-build $GENOME \
+	--tumor-id $ID \
+	--retain-fmt AF,F1R2,F2R1 \
+	--retain-ann am_class,am_pathogenicity,CADD_PHRED,DANN_score,MAX_AF,gnomADg_AF_afr,gnomADg_AF_amr,gnomADg_AF_asj,gnomADg_AF_eas,gnomADg_AF_fin,gnomADg_AF_nfe,gnomADg_AF_oth,gnomADe_AF_afr,gnomADe_AF_amr,gnomADe_AF_asj,gnomADe_AF_eas,gnomADe_AF_fin,gnomADe_AF_nfe,gnomADe_AF_oth,gnomADe_AF_popmax,MANE_SELECT,MANE_PLUS_CLINICAL
+
+gzip $SOURCEPATH/02_variants/vep.mutect2.MAF
+mv $SOURCEPATH/02_variants/vep.mutect2.MAF.gz $SOURCEPATH/_data_export
+
+####
+#
+# 12. Structural variants
+#
+
+echo "Structural variants -> skipped for the moment"
+
+# https://github.com/vpc-ccg/svict
+# $SVICT -r $REFERENCE \
+#    -i $FINALBAM \
+#    -o $SOURCEPATH/04_structural_variants/svict_variants \
+#    --annotation $GENESGTF \
+#    --no_indel --print_stats \
+#    --min_support 2 > svict.log
+
+####
+#
+# 13. FACTERA: https://factera.stanford.edu/
+#
+
+# bamToFastq -i $FINALBAM -fq $SOURCEPATH/05_fusions/data_R1.fq -fq2 $SOURCEPATH/05_fusions/data_R2.fq
+# $SAMTOOLS fasta -F 4 -N -1 $SOURCEPATH/05_fusions/data_R1.fq -2 $SOURCEPATH/05_fusions/data_R2.fq $FINALBAM
+
+# bwa aln $BWAINDEX \
+# 	-t $THREADS \
+# 	-1 $SOURCEPATH/00_fastq/trimmed_R1.fastq.gz > $SOURCEPATH/05_fusions/aln_R1.sai
+# 	
+# bwa aln $BWAINDEX \
+# 	-t $THREADS \
+# 	-2 $SOURCEPATH/00_fastq/trimmed_R2.fastq.gz > $SOURCEPATH/05_fusions/aln_R2.sai
+# 
+# bwa sampe $BWAINDEX $SOURCEPATH/05_fusions/aln_R1.sai \
+# 	$SOURCEPATH/05_fusions/aln_R2.sai \
+# 	$SOURCEPATH/00_fastq/trimmed_R1.fastq.gz \
+# 	$SOURCEPATH/00_fastq/trimmed_R2.fastq.gz > $SOURCEPATH/05_fusions/aln.sam 
+# 
+# $SAMTOOLS view -b -o $SOURCEPATH/05_fusions/aln.bam \
+# 	$SOURCEPATH/05_fusions/aln.sam \
+# 	--threads $THREADS
+
+perl $FACTERA -F -o $SOURCEPATH/05_fusions -r 2 -m 2 -p $THREADS \
+	$FINALBAM $GENESBED $TWOBIT $BEDFILE 
+
+mv $SOURCEPATH/05_fusions/*.factera.fusions.txt $SOURCEPATH/_data_export/fusions_factera.txt
+
+####
+#
+# 90. Clean up
+#
+
+# SOURCEPATH=$(pwd -LP)
+rm -rf $SOURCEPATH/00_fastq/*fq.gz
+rm -rf $SOURCEPATH/00_fastq/*fastq.gz
+rm -rf $SOURCEPATH/00_fastq/*sam
+rm -rf $SOURCEPATH/00_fastq/*bam
+ 
+rm -rf $SOURCEPATH/01_processing/*fastq.gz
+rm -rf $SOURCEPATH/01_processing/*.sam
+rm -rf $SOURCEPATH/01_processing/*.ba*
+
+rm -rf $SOURCEPATH/02_variants/*.filtered.vcf
+rm -rf $SOURCEPATH/02_variants/*.filtered.vcf.idx
+ 
+gzip $SOURCEPATH/02_variants/*.vcf
+ 
+rm -rf $SOURCEPATH/05_fusions/liqid_biopsy.final.factera.blast*
+ 
+gzip $SOURCEPATH/_data_export/*txt
+gzip $SOURCEPATH/uccsh_panel_grch38.interval_list
+
+####
+#
+# 91. Copy results
+#
+
+#rsync -av $SOURCEPATH/_data_export/00_stats.txt.gz $RESULTS/$ID/
+rsync -av $SOURCEPATH/_data_export/*_pcr_metrics.txt.gz $RESULTS/$ID/
+rsync -av $SOURCEPATH/_data_export/*_stats.insert.txt.gz $RESULTS/$ID/
+rsync -av $SOURCEPATH/_data_export/fusions_factera.txt.gz $RESULTS/$ID/
+rsync -av $SOURCEPATH/_data_export/vep.mutect2.MAF.gz $RESULTS/$ID/
+rsync -av $SOURCEPATH/_data_export/vep.VarDict.MAF.gz $RESULTS/$ID/
+rsync -av $SOURCEPATH/_data_export/duplex_metrics.* $RESULTS/$ID/
+rsync -av $SOURCEPATH/_data_export/family_size_hist.txt.gz $RESULTS/$ID/
+
