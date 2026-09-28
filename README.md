@@ -191,7 +191,7 @@ Written to `<BATCH>/fgbio_tables/`:
 
 If you use this code, please cite:
 
-> Feierabend S, Künstner A, et al. *A liquid biopsy-centered, pan-cancer, open next generation sequencing panel to support clinical decision-making (LION panel).* [medRxiv, 2026, DOI: [TODO](https://doi.org/10.64898/2026.06.05.26354976)]
+> Feierabend S, Künstner A, et al. *A liquid biopsy-centered, pan-cancer, open next generation sequencing panel to support clinical decision-making (LION panel).* [medRxiv, 2026, DOI: https://doi.org/10.64898/2026.06.05.26354976]
 
 Code archive: this repository
 
