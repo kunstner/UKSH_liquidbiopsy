@@ -5,6 +5,12 @@
 # Author: Axel Künstner
 # CHIP-code based on implementation by Leopold Schawe
 #
+
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Axel Künstner
+# Part of the LION panel analysis code: https://github.com/kunstner/UKSH_liquidbiopsy
+# For research use only; not validated as a medical device.
+
 # Description:
 #   Per-sample summarization of cfDNA sequencing data processed through the
 #   fgbio UMI-based error correction pipeline. For each sample the script

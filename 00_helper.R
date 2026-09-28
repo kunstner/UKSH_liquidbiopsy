@@ -4,6 +4,11 @@
 # Helper Functions for cfDNA Analysis Pipeline
 # Author: Axel Künstner
 
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Axel Künstner
+# Part of the LION panel analysis code: https://github.com/kunstner/UKSH_liquidbiopsy
+# For research use only; not validated as a medical device.
+
 # Function ACMG Classification --------------------------------------------
 
 # Classification function taken from MIRACUM pipe

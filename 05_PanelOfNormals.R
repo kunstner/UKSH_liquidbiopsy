@@ -4,6 +4,11 @@
 # Creation of panel of normals for liquid biopsy workflow
 # Author: Axel Künstner
 
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Axel Künstner
+# Part of the LION panel analysis code: https://github.com/kunstner/UKSH_liquidbiopsy
+# For research use only; not validated as a medical device.
+
 # Libraries ---------------------------------------------------------------
 
 pacman::p_load(tidyverse, openxlsx2, data.table)
