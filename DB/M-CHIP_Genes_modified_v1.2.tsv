@@ -1,0 +1,103 @@
+Gene	CHIP_Variants	MANE_NM_v1.4	MANE_ENST_v1.4	Mutation_type	Frameshift	Nonsense	Splice-Site	Missense	Silent	Deletion	Insertion	Delins
+ARID2	Frameshift/Nonsense/Splice-site	NM_152641.4	ENST00000334344.11	Frameshift|Nonsense|Splice-Site	all	all	all	NA	NA	NA	NA	NA
+ASXL1	(Frameshift/Nonsense/Splice-site exon11|12)	NM_015338.6	ENST00000375687.10	Frameshift|Nonsense|Splice-Site	exon11|12	exon11|12	exon11|12	NA	NA	NA	NA	NA
+ASXL2	(Frameshift/Nonsense/Splice-site exon11|12)	NM_018263.6	ENST00000435504.9	Frameshift|Nonsense|Splice-Site	exon11|12	exon11|12	exon11|12	NA	NA	NA	NA	NA
+ATM	Frameshift/Nonsense/Splice-site/Missense R337|R2832|N2875|I2888|R3008	NM_000051.4	ENST00000675843.1	Frameshift|Nonsense|Splice-Site|Missense	all	all	all	R337|R2832|N2875|I2888|R3008	NA	NA	NA	NA
+BAX	Frameshift/Nonsense/Splice-site	NM_138761.4	ENST00000345358.12	Frameshift|Nonsense|Splice-Site	all	all	all	NA	NA	NA	NA	NA
+BCOR	Frameshift/Nonsense/Splice-site	NM_001123385.2	ENST00000378444.9	Frameshift|Nonsense|Splice-Site	all	all	all	NA	NA	NA	NA	NA
+BCORL1	Frameshift/Nonsense/Splice-site	NM_001379451.1	ENST00000540052.6	Frameshift|Nonsense|Splice-Site	all	all	all	NA	NA	NA	NA	NA
+BRAF	Nonsense R603*/Missense p.418-672	NM_004333.6	ENST00000646891.2	Nonsense|Missense	NA	R603*	NA	p.418-672	NA	NA	NA	NA
+BRCC3	Frameshift/Nonsense/Splice-site	NM_001018055.3	ENST00000330045.12	Frameshift|Nonsense|Splice-Site	all	all	all	NA	NA	NA	NA	NA
+CALR	Frameshift p.333-418	NM_004343.4	ENST00000316448.10	Frameshift	p.333-418	NA	NA	NA	NA	NA	NA	NA
+CBL	Frameshift/Nonsense/Splice-site/Missense p.345-434	NM_005188.4	ENST00000264033.6	Frameshift|Nonsense|Splice-Site|Missense	all	all	all	p.345-434	NA	NA	NA	NA
+CBLB	Missense p.372-412	NM_170662.5	ENST00000394030.8	Missense	NA	NA	NA	p.372-412	NA	NA	NA	NA
+CCDC115	Frameshift/Nonsense/Splice-site	NM_032357.4	ENST00000259229.7	Frameshift|Nonsense|Splice-Site	all	all	all	NA	NA	NA	NA	NA
+CCL22	Missense 	NM_002990.5	ENST00000219235.5	Missense	NA	NA	NA	all	NA	NA	NA	NA
+CEBPA	Frameshift/Nonsense/Splice-site	NM_004364.5	ENST00000498907.3	Frameshift|Nonsense|Splice-Site	all	all	all	NA	NA	NA	NA	NA
+CHEK2	Frameshift/Nonsense/Splice-site/Missense	NM_007194.4	ENST00000404276.6	Frameshift|Nonsense|Splice-Site|Missense	all	all	all	all	NA	NA	NA	NA
+CREBBP	Frameshift/Nonsense/Splice-site/Missense p.1344-1639/Deletion S1680del	NM_004380.3	ENST00000262367.10	Frameshift|Nonsense|Splice-Site|Missense|Deletion	all	all	all	p.1344-1639	NA	S1680del	NA	NA
+CSF1R	Missense L301|Y969	NM_001288705.3	ENST00000675795.1	Missense	NA	NA	NA	L301|Y969	NA	NA	NA	NA
+CSF3R	(Frameshift/Nonsense/Splice-site p.618-836|c.741-791)/Missense T615|T618	NM_000760.4	ENST00000373106.6	Frameshift|Nonsense|Splice-Site|Missense	p.618-836|c.741-791	p.618-836|c.741-791	p.618-836|c.741-791	T615|T618	NA	NA	NA	NA
+CTCF	Frameshift/Nonsense/Splice-site/Missense R377C|R377H|P378A|P378L	NM_006565.4	ENST00000264010.10	Frameshift|Nonsense|Splice-Site|Missense	all	all	all	R377C|R377H|P378A|P378L	NA	NA	NA	NA
+CUX1	Frameshift/Nonsense/Splice-site	NM_181552.4	ENST00000292535.12	Frameshift|Nonsense|Splice-Site	all	all	all	NA	NA	NA	NA	NA
+DNMT3A	Frameshift/Nonsense/Splice-site/Missense p.290-912	NM_022552.5	ENST00000321117.10	Frameshift|Nonsense|Splice-Site|Missense	all	all	all	p.290-912	NA	NA	NA	NA
+DNMT3B	Frameshift/Nonsense/Splice-site	NM_006892.4	ENST00000328111.6	Frameshift|Nonsense|Splice-Site	all	all	all	NA	NA	NA	NA	NA
+EED	Frameshift/Nonsense/Splice-site/Missense L196|L240|I363	NM_003797.5	ENST00000263360.11	Frameshift|Nonsense|Splice-Site|Missense	all	all	all	L196|L240|I363	NA	NA	NA	NA
+EP300	Frameshift/Nonsense/Splice-site/Missense D1399N|D1399Y|P1452L|Y1467N|Y1467H|Y1467C|R1627W|A1629V/Deletion VF1148_1149del	NM_001429.4	ENST00000263253.9	Frameshift|Nonsense|Splice-Site|Missense|Deletion	all	all	all	D1399N|D1399Y|P1452L|Y1467N|Y1467H|Y1467C|R1627W|A1629V	NA	V1148_F1149del	NA	NA
+ETNK1	Missense p.154-156	NM_018638.5	ENST00000266517.9	Missense	NA	NA	NA	p.154-156	NA	NA	NA	NA
+ETV6	Frameshift/Nonsense/Splice-site	NM_001987.5	ENST00000396373.9	Frameshift|Nonsense|Splice-Site	all	all	all	NA	NA	NA	NA	NA
+EZH2	Frameshift/Nonsense/Splice-site/Missense Q62R|N102S|F145S|F145C|F145Y|F145L|G159R|E169D|R207Q|K243E|E249K|R288Q|H297R|P493S|p.500-751	NM_004456.5	ENST00000320356.7	Frameshift|Nonsense|Splice-Site|Missense	all	all	all	Q62R|N102S|F145S|F145C|F145Y|F145L|G159R|E169D|R207Q|K243E|E249K|R288Q|H297R|P493S|p.500-751	NA	NA	NA	NA
+FLT3	Missense p.800-850|p.569-700/Deletion p.D835del	NM_004119.3	ENST00000241453.12	Missense|Deletion	NA	NA	NA	p.800-850|p.569-700	NA	p.D835del	NA	NA
+FOXP1	Frameshift/Nonsense/Splice-site	NM_001349338.3	ENST00000649528.3	Frameshift|Nonsense|Splice-Site	all	all	all	NA	NA	NA	NA	NA
+GATA1	Frameshift/Nonsense/Splice-site	NM_002049.4	ENST00000376670.9	Frameshift|Nonsense|Splice-Site	all	all	all	NA	NA	NA	NA	NA
+GATA2	Frameshift/Nonsense/Splice-site/Missense p.250-398	NM_032638.5	ENST00000341105.7	Frameshift|Nonsense|Splice-Site|Missense	all	all	all	p.250-398	NA	NA	NA	NA
+GATA3	(Frameshift/Nonsense/Splice-site p.264-297|p.318-350)/Missense R276W|R276Q|N286T|L348V	NM_001002295.2	ENST00000379328.9	Frameshift|Nonsense|Splice-Site|Missense	p.264-297|p.318-350	p.264-297|p.318-350	p.264-297|p.318-350	R276W|R276Q|N286T|L348V	NA	NA	NA	NA
+GNA13	Missense I34T|G57S|S62F|M68K|Q134R|Y145F|L152F|E167D|Q169H|R264H|E273K|V322G|V362G|L371F	NM_006572.6	ENST00000439174.7	Missense	NA	NA	NA	I34T|G57S|S62F|M68K|Q134R|Y145F|L152F|E167D|Q169H|R264H|E273K|V322G|V362G|L371F	NA	NA	NA	NA
+GNAS	Missense R201|Q227|R374	NM_000516.7	ENST00000371085.8	Missense	NA	NA	NA	R201|Q227|R374	NA	NA	NA	NA
+GNB1	Missense K57|D76|G77|K78|I80|I81|N88|K89	NM_002074.5	ENST00000378609.9	Missense	NA	NA	NA	K57|D76|G77|K78|I80|I81|N88|K89	NA	NA	NA	NA
+IDH1	Missense R132|V178|p.126-138	NM_005896.4	ENST00000345146.7	Missense	NA	NA	NA	R132|V178|p.126-138	NA	NA	NA	NA
+IDH2	Missense R140|R172|p.134-146|p.164-180	NM_002168.4	ENST00000330062.8	Missense	NA	NA	NA	R140|R172|p.134-146|p.164-180	NA	NA	NA	NA
+IGLL5	Missense 	NM_001178126.2	ENST00000526893.6	Missense	NA	NA	NA	all	NA	NA	NA	NA
+IKZF1	Frameshift/Nonsense/Splice-site	NM_006060.6	ENST00000331340.8	Frameshift|Nonsense|Splice-Site	all	all	all	NA	NA	NA	NA	NA
+IKZF2	Frameshift/Nonsense	NM_001387220.1	ENST00000434687.6	Frameshift|Nonsense	all	all	NA	NA	NA	NA	NA	NA
+IKZF3	Frameshift/Nonsense	NM_012481.5	ENST00000346872.8	Frameshift|Nonsense	all	all	NA	NA	NA	NA	NA	NA
+JAK1	Missense T478A|T478S|V623A|A634D|L653F|R724H|R724Q|R724P|T782M|L783F	NM_002227.4	ENST00000342505.5	Missense	NA	NA	NA	T478A|T478S|V623A|A634D|L653F|R724H|R724Q|R724P|T782M|L783F	NA	NA	NA	NA
+JAK2	Missense N533D|N533Y|N533S|H538R|K539E|K539L|I540T|I540V|V617F|R683S|R683G|p.505-547/Deletion p.N542_E543del|p.E543_D544del/Insertion p.I546_F547insLFHKIRNEDLI/Delins p.F537_K539delinsL|p.H538_K539delinsL|p.I540_E543delinsMK|p.I540_D544delinsMK|p.R541_E543delinsK	NM_004972.4	ENST00000381652.4	Missense|Deletion|Insertion|Delins	NA	NA	NA	N533D|N533Y|N533S|H538R|K539E|K539L|I540T|I540V|V617F|R683S|R683G|p.505-547	NA	p.N542_E543del|p.E543_D544del	p.I546_F547insLFHKIRNEDLI	p.F537_K539delinsL|p.H538_K539delinsL|p.I540_E543delinsMK|p.I540_D544delinsMK|p.R541_E543delinsK
+JAK3	Missense M511T|M511I|A572V|A572T|A573V|R657Q|V715I|V715A	NM_000215.4	ENST00000458235.7	Missense	NA	NA	NA	M511T|M511I|A572V|A572T|A573V|R657Q|V715I|V715A	NA	NA	NA	NA
+KDM6A	Frameshift/Nonsense/Splice-site/Deletion p.I419del	NM_001291415.2	ENST00000611820.5	Frameshift|Nonsense|Splice-Site|Deletion	all	all	all	NA	NA	p.I419del	NA	NA
+KIT	Missense p.400-430|p.502-503|p.540-600|P627L|P627T|R634W|K642E|K642Q|V654A|V654E|H697Y|H697D|E761D|K807R|p.810-830/Deletion| p.551-559del|p.V560del|p.D579del/Insertion p.Y503_F504ins	NM_000222.3	ENST00000288135.6	Missense|Insertion|Deletion	NA	NA	NA	p.400-430|p.502-503|p.540-600|P627L|P627T|R634W|K642E|K642Q|V654A|V654E|H697Y|H697D|E761D|K807R|p.810-830	NA	p.551-559del|p.V560del|p.D579del	p.Y503_F504ins	NA
+KMT2A	Frameshift/Nonsense/Splice-site	NM_001197104.2	ENST00000534358.8	Frameshift|Nonsense|Splice-Site	all	all	all	NA	NA	NA	NA	NA
+KMT2C	Frameshift/Nonsense/Splice-site	NM_170606.3	ENST00000262189.11	Frameshift|Nonsense|Splice-Site	all	all	all	NA	NA	NA	NA	NA
+KMT2D	Frameshift/Nonsense/Splice-site/Missense p.5000-5537	NM_003482.4	ENST00000301067.12	Frameshift|Nonsense|Splice-Site|Missense	all	all	all	p.5000-5537	NA	NA	NA	NA
+KRAS	Missense K5|p.12-14|D33|p.58-64|K117|A146	NM_004985.5	ENST00000311936.8	Missense	NA	NA	NA	K5|p.12-14|D33|p.58-64|K117|A146	NA	NA	NA	NA
+LUC7L2	Frameshift/Nonsense/Splice-site	NM_016019.5	ENST00000354926.9	Frameshift|Nonsense|Splice-Site	all	all	all	NA	NA	NA	NA	NA
+MAGEC3	Missense 	NM_138702.1	ENST00000298296.1	Missense	NA	NA	NA	all	NA	NA	NA	NA
+MGA	Frameshift/Nonsense/Splice-site	NM_001400225.1	ENST00000703841.1	Frameshift|Nonsense|Splice-Site	all	all	all	NA	NA	NA	NA	NA
+MPL	Missense p.500-520|Y591|R592/Deletion p.510-513del	NM_005373.3	ENST00000372470.9	Missense|Deletion	NA	NA	NA	p.500-520|Y591|R592	NA	p.510-513del	NA	NA
+MTA2	Missense 	NM_004739.4	ENST00000278823.7	Missense	NA	NA	NA	all	NA	NA	NA	NA
+MYD88	Missense 	NM_002468.5	ENST00000650905.2	Missense	NA	NA	NA	all	NA	NA	NA	NA
+NF1	Frameshift/Nonsense/Splice-site	NM_001042492.3	ENST00000358273.9	Frameshift|Nonsense|Splice-Site	all	all	all	NA	NA	NA	NA	NA
+NOTCH1	(Frameshift/Nonsense/Splice-site p.2124-2555)	NM_017617.5	ENST00000651671.1	Frameshift|Nonsense|Splice-Site	p.2124-2555	p.2124-2555	p.2124-2555	NA	NA	NA	NA	NA
+NOTCH2	(Frameshift/Nonsense/Splice-site p.1827-2471)	NM_024408.4	ENST00000256646.7	Frameshift|Nonsense|Splice-Site	p.1827-2471	p.1827-2471	p.1827-2471	NA	NA	NA	NA	NA
+NPM1	Frameshift p.260-300	NM_002520.7	ENST00000296930.10	Frameshift	p.260-300	NA	NA	NA	NA	NA	NA	NA
+NRAS	Missense p.12-14|A18|I24|p.59-64|A66|D69|T74|A146	NM_002524.5	ENST00000369535.5	Missense	NA	NA	NA	p.12-14|A18|I24|p.59-64|A66|D69|T74|A146	NA	NA	NA	NA
+PDS5B	Frameshift/Nonsense/Splice-site/Missense R1292Q	NM_015032.4	ENST00000315596.15	Frameshift|Nonsense|Splice-Site|Missense	all	all	all	R1292Q	NA	NA	NA	NA
+PDSS2	Frameshift/Nonsense	NM_020381.4	ENST00000369037.9	Frameshift|Nonsense	all	all	NA	NA	NA	NA	NA	NA
+PHF6	Frameshift/Nonsense/Splice-site/Missense A40D|p.42-132|p.235-330	NM_001015877.2	ENST00000370803.8	Frameshift|Nonsense|Splice-Site|Missense	all	all	all	A40D|p.42-132|p.235-330	NA	NA	NA	NA
+PHIP	Frameshift/Nonsense/Splice-site	NM_017934.7	ENST00000275034.5	Frameshift|Nonsense|Splice-Site	all	all	all	NA	NA	NA	NA	NA
+PIGA	Frameshift/Nonsense/Splice-site	NM_002641.4	ENST00000333590.6	Frameshift|Nonsense|Splice-Site	all	all	all	NA	NA	NA	NA	NA
+PPM1D	(Frameshift/Nonsense/Splice-site exon5|exon6)	NM_003620.4	ENST00000305921.8	Frameshift|Nonsense|Splice-Site	exon5|exon6	exon5|exon6	exon5|exon6	NA	NA	NA	NA	NA
+PRPF40B	Frameshift/Nonsense/Splice-site/Missense P15|M58|P405|P562	NM_001031698.3	ENST00000548825.7	Frameshift|Nonsense|Splice-Site|Missense	all	all	all	P15|M58|P405|P562	NA	NA	NA	NA
+PRPF8	Missense M1307I|M1591|C1594|D1598|A1603	NM_006445.4	ENST00000304992.11	Missense	NA	NA	NA	M1307I|M1591|C1594|D1598|A1603	NA	NA	NA	NA
+PTEN	Frameshift/Nonsense/Splice-site/Missense D24G|R47G|F56V|L57W|H61R|K66N|Y68H|C71Y|F81C|Y88C|D92G|D92V|D92E|H93Y|H93D|H93Q|N94I|P95L|I101T|C105F|C105S|D107Y|L112V|H123Y|C124R|C124S|K125E|A126D|K128N|R130G|R130Q|R130L|G132D|I135V|I135K|C136R|C136F|K144Q|A151T|D153Y|D153N|Y155H|Y155C|R159K|R159S|R161K|R161I|G165R|G165E|S170N|S170I|R173C|Y174D|Y177C|H196Y|R234W|G251C|D252Y|F271S|D326G	NM_000314.8	ENST00000371953.8	Frameshift|Nonsense|Splice-Site|Missense	all	all	all	D24G|R47G|F56V|L57W|H61R|K66N|Y68H|C71Y|F81C|Y88C|D92G|D92V|D92E|H93Y|H93D|H93Q|N94I|P95L|I101T|C105F|C105S|D107Y|L112V|H123Y|C124R|C124S|K125E|A126D|K128N|R130G|R130Q|R130L|G132D|I135V|I135K|C136R|C136F|K144Q|A151T|D153Y|D153N|Y155H|Y155C|R159K|R159S|R161K|R161I|G165R|G165E|S170N|S170I|R173C|Y174D|Y177C|H196Y|R234W|G251C|D252Y|F271S|D326G	NA	NA	NA	NA
+PTPN11	Missense p.40-81|p.112-197|p.265-593	NM_002834.5	ENST00000351677.7	Missense	NA	NA	NA	p.40-81|p.112-197|p.265-593	NA	NA	NA	NA
+RAD21	Frameshift/Nonsense/Splice-site/Missense R65Q|H208R|Q474R	NM_006265.3	ENST00000297338.7	Frameshift|Nonsense|Splice-Site|Missense	all	all	all	R65Q|H208R|Q474R	NA	NA	NA	NA
+RUNX1	Frameshift/Nonsense/Splice-site/Missense p.100-277|R423	NM_001754.5	ENST00000675419.1	Frameshift|Nonsense|Splice-Site|Missense	all	all	all	p.100-277|R423	NA	NA	NA	NA
+SETBP1	Missense p.855-880	NM_015559.3	ENST00000649279.2	Missense	NA	NA	NA	p.855-880	NA	NA	NA	NA
+SETD2	Frameshift/Nonsense/Splice-site/Missense  V1190M	NM_014159.7	ENST00000409792.4	Frameshift|Nonsense|Splice-Site|Missense	all	all	all	V1190M	NA	NA	NA	NA
+SETDB1	Frameshift/Nonsense/Missense  K716E	NM_001366418.1	ENST00000692827.1	Frameshift|Nonsense|Missense	all	all	NA	K716E	NA	NA	NA	NA
+SF1	Frameshift/Nonsense/Splice-site/Missense T454M|Y476C|A508G	NM_004630.4	ENST00000377390.8	Frameshift|Nonsense|Splice-Site|Missense	all	all	all	T454M|Y476C|A508G	NA	NA	NA	NA
+SF3A1	Frameshift/Nonsense/Splice-site/Missense A57S|M117I|K166T|Y271C	NM_005877.6	ENST00000215793.13	Frameshift|Nonsense|Splice-Site|Missense	all	all	all	A57S|M117I|K166T|Y271C	NA	NA	NA	NA
+SF3B1	Missense G347V|R387W|R387Q|p.500-1000	NM_012433.4	ENST00000335508.11	Missense	NA	NA	NA	G347V|R387W|R387Q|p.500-1000	NA	NA	NA	NA
+SH2B3	Frameshift/Nonsense/Splice-site/Missense p.364-459	NM_005475.3	ENST00000341259.7	Frameshift|Nonsense|Splice-Site|Missense	all	all	all	p.364-459	NA	NA	NA	NA
+SIK3	Frameshift/Nonsense/Splice-site	NM_001366686.3	ENST00000445177.6	Frameshift|Nonsense|Splice-Site	all	all	all	NA	NA	NA	NA	NA
+SMC1A	Frameshift/Nonsense/Splice-site/Missense K190T|R586W|M689V|R807H|R1090H|R1090C	NM_006306.4	ENST00000322213.9	Frameshift|Nonsense|Splice-Site|Missense	all	all	all	K190T|R586W|M689V|R807H|R1090H|R1090C	NA	NA	NA	NA
+SMC3	Frameshift/Nonsense/Splice-site/Missense R155I|Q367E|D392V|K571R|R661P|G662C	NM_005445.4	ENST00000361804.5	Frameshift|Nonsense|Splice-Site|Missense	all	all	all	R155I|Q367E|D392V|K571R|R661P|G662C	NA	NA	NA	NA
+SPRED2 	Frameshift/Nonsense/Splice-site/Missense	NM_181784.3	ENST00000356388.9	Frameshift|Nonsense|Splice-Site|Missense	all	all	all	all	NA	NA	NA	NA
+SRCAP	Frameshift/Nonsense/Splice-site	NM_006662.3	ENST00000262518.9	Frameshift|Nonsense|Splice-Site	all	all	all	NA	NA	NA	NA	NA
+SRSF1	Missense 	NM_006924.5	ENST00000258962.5	Missense	NA	NA	NA	all	NA	NA	NA	NA
+SRSF2	Frameshift P95fs/Missense Y44H|F57|p.85-100|P107	NM_001195427.2	ENST00000359995.10	Frameshift|Missense	P95fs	NA	NA	Y44H|F57|p.85-100|P107	NA	NA	NA	NA
+STAG1	Frameshift/Nonsense/Splice-site/Missense  H1085Y	NM_005862.3	ENST00000383202.7	Frameshift|Nonsense|Splice-Site|Missense	all	all	all	H1085Y	NA	NA	NA	NA
+STAG2	Frameshift/Nonsense/Splice-site	NM_001042750.2	ENST00000371145.8	Frameshift|Nonsense|Splice-Site	all	all	all	NA	NA	NA	NA	NA
+STAT3	Missense p.584-674	NM_139276.3	ENST00000264657.10	Missense	NA	NA	NA	p.584-674	NA	NA	NA	NA
+SUZ12	Frameshift/Nonsense/Splice-site	NM_015355.4	ENST00000322652.10	Frameshift|Nonsense|Splice-Site	all	all	all	NA	NA	NA	NA	NA
+TET2	Frameshift/Nonsense/Splice-site/ Missense p.1104-1481|p.1843-2002	NM_001127208.3	ENST00000380013.9	Frameshift|Nonsense|Splice-Site|Missense	all	all	all	p.1104-1481|p.1843-2002	NA	NA	NA	NA
+TP53	Frameshift/Nonsense/Splice-site/Missense/Silent T125=	NM_000546.6	ENST00000269305.9	Frameshift|Nonsense|Splice-Site|Missense|Silent	all	all	all	all	T125=	NA	NA	NA
+U2AF1	Missense D14G|F22|R28|R32|S34|R35|C154|R156|Q157	NM_006758.3	ENST00000291552.9	Missense	NA	NA	NA	D14G|F22|R28|R32|S34|R35|C154|R156|Q157	NA	NA	NA	NA
+U2AF2	Missense R18|Q143|M144|L187|Q190	NM_007279.3	ENST00000308924.9	Missense	NA	NA	NA	R18|Q143|M144|L187|Q190	NA	NA	NA	NA
+WT1	Frameshift/Nonsense/Splice-site	NM_024426.6	ENST00000452863.10	Frameshift|Nonsense|Splice-Site	all	all	all	NA	NA	NA	NA	NA
+YLPM1	Frameshift/Nonsense/Splice-site	NM_019589.3	ENST00000325680.12	Frameshift|Nonsense|Splice-Site	all	all	all	NA	NA	NA	NA	NA
+ZBTB33	Frameshift/Nonsense/Splice-site/Missense	NM_001184742.2	ENST00000557385.2	Frameshift|Nonsense|Splice-Site|Missense	all	all	all	all	NA	NA	NA	NA
+ZNF234	Frameshift/Nonsense/Splice-site	NM_006630.3	ENST00000426739.7	Frameshift|Nonsense|Splice-Site	all	all	all	NA	NA	NA	NA	NA
+ZNF318	Frameshift/Nonsense/Splice-site	NM_014345.3	ENST00000361428.3	Frameshift|Nonsense|Splice-Site	all	all	all	NA	NA	NA	NA	NA
+ZRSR2	Frameshift/Nonsense/Splice-site/Missense R126P|E133G|C181F|H191Y|I202N|F239V|F239Y|N261Y|C280R|C302R|C326R|H330R|N382K	NM_005089.4	ENST00000307771.8	Frameshift|Nonsense|Splice-Site|Missense	all	all	all	R126P|E133G|C181F|H191Y|I202N|F239V|F239Y|N261Y|C280R|C302R|C326R|H330R|N382K	NA	NA	NA	NA

@@ -1,0 +1,110 @@
+Gene	Inclusion
+ABL1	Resistance gene / AS Cancer Hotspot Panel and SureSelectCancerAIO
+AKT1	Custom panel Agilent, ThermoFisher
+ALK	nNGM
+AMER1	UKSH
+APC	UKSH
+ARID1A	Gene list
+ASXL1	CRC MF IKMB suggestion
+ATM	UKSH
+AXL	Overlap EXTARGET
+BCL2	Overlap EXTARGET
+BRAF	Original NGS panel 
+BRCA1	Overlap EXTARGET
+BRCA2	CRC MF IKMB suggestion
+CCND1	Driver mutation MM, CRC panel
+CD274	Custom panel Agilent, ThermoFisher
+CD79B	UKSH
+CDH1	Resistance gene / AS Cancer Hotspot Panel and SureSelectCancerAIO
+CDK4	Resistance gene / AS Cancer Hotspot Panel and SureSelectCancerAIO
+CDK6	Resistance gene / AS Cancer Hotspot Panel and SureSelectCancerAIO
+CDKN2A	Original NGS panel 
+CHEK2	CHIP genes (PMID: 34298011)
+CSF1R	Resistance gene / AS Cancer Hotspot Panel and SureSelectCancerAIO
+CTNNB1	nNGM
+DIS3	Driver mutation MM
+DNMT3A	CHIP genes (PMID: 34298011)
+DUSP2	Driver mutation MM
+EGFR	Original NGS panel 
+EGR1	Driver mutation MM
+ERBB2	Original NGS panel 
+ERBB3	Driver gene COR, CRC panel
+ERBB4	Resistance gene / AS Cancer Hotspot Panel and SureSelectCancerAIO
+EZH2	UKSH internal suggestion
+FAM46C (TENT5C)	Driver mutation MM
+FBXW7	UKSH
+FGFR1	nNGM
+FGFR2	nNGM
+FGFR3	nNGM
+FGFR4	nNGM
+FLT3	Overlap EXTARGET
+GNA11	UKSH
+GNAQ	UKSH
+GNAS	Resistance gene / AS Cancer Hotspot Panel and SureSelectCancerAIO
+HIST1H1E	Driver mutation MM
+HRAS	Original NGS panel 
+IDH1	nNGM and UKSH internal suggestion
+IDH2	nNGM
+IGLL5	Driver mutation MM
+JAK2	Resistance gene / AS Cancer Hotspot Panel and SureSelectCancerAIO
+JAK3	Resistance gene / AS Cancer Hotspot Panel and SureSelectCancerAIO
+KDR	Resistance gene / AS Cancer Hotspot Panel and SureSelectCancerAIO
+KEAP1	Original NGS panel 
+KIT	Original NGS panel 
+KLHL6	Driver mutation MM
+KMT2C	UKSH
+KMT2D	UKSH
+KRAS	Original NGS panel 
+LRP1B	CRC MF IKMB suggestion
+LTB	Driver mutation MM
+MAP2K1	nNGM
+MAP2K2	Overlap EXTARGET
+MAPK1	Overlap EXTARGET
+MAPK3	Overlap EXTARGET
+MDM2	Resistance gene / AS Cancer Hotspot Panel and SureSelectCancerAIO
+MET	Original NGS panel 
+MLH1	Resistance gene / AS Cancer Hotspot Panel and SureSelectCancerAIO
+MTOR	Driver gene COR, CRC panel
+MYC	Resistance gene / AS Cancer Hotspot Panel and SureSelectCancerAIO
+MYCN	Resistance gene / AS Cancer Hotspot Panel and SureSelectCancerAIO
+MYD88	Custom panel Agilent and UKSH internal suggestion
+NF1	CHIP genes (PMID: 34298011)
+NFE2L2	Original NGS panel 
+NOTCH1	CRC MF IKMB suggestion
+NOTCH2	UKSH
+NRAS	Original NGS panel 
+NTRK1	nNGM
+NTRK2	nNGM
+NTRK3	UKSH internal suggestion
+PARP1	Overlap EXTARGET
+PDGFRA	Original NGS panel 
+PDGFRB	Resistance gene / AS Cancer Hotspot Panel and SureSelectCancerAIO
+PIK3CA	Original NGS panel 
+PIK3R1	Custom panel Agilent, ThermoFisher
+PPM1D	CHIP genes (PMID: 34298011)
+PRKD2	Driver mutation MM
+PTEN	Original NGS panel 
+PTPN11	Driver mutation MM, Driver gene COR
+RB1	Driver mutation MM
+RET	nNGM
+RNF43	UKSH
+ROS1	nNGM
+SDHA	Original NGS panel 
+SF3B1	Original NGS panel 
+SMAD4	Original NGS panel 
+SMARCB1	Resistance gene / AS Cancer Hotspot Panel and SureSelectCancerAIO
+SMO	Resistance gene / AS Cancer Hotspot Panel and SureSelectCancerAIO
+SOX9	CRC MF IKMB suggestion
+SRC	Resistance gene / AS Cancer Hotspot Panel and SureSelectCancerAIO
+SRSF2	CHIP genes (PMID: 34298011)
+STAT3	CHIP genes (PMID: 34298011)
+STK11	nNGM
+TCF7L2	UKSH
+TET2	CHIP genes (PMID: 34298011)
+TGFBR2	CRC MF IKMB suggestion
+TP53	Original NGS panel 
+TSC1	Resistance gene / AS Cancer Hotspot Panel and SureSelectCancerAIO
+TSC2	Resistance gene / AS Cancer Hotspot Panel and SureSelectCancerAIO
+UGT1A1	Custom panel Roche, ThermoFisher
+VHL	Resistance gene / AS Cancer Hotspot Panel and SureSelectCancerAIO
+WT1	Resistance gene / AS Cancer Hotspot Panel and SureSelectCancerAIO
