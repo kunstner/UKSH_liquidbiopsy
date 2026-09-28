@@ -2,8 +2,7 @@
 
 R scripts for the downstream analysis of liquid biopsy (cfDNA) sequencing data of the **LION panel** (109-gene hybrid-capture panel with UMIs). They take the output of the fgbio-based preprocessing and variant calling workflow and produce annotated, filtered per-sample variant tables, CHIP classification, surrogate tumor fraction (TF) estimates, QC summaries and plots.
 
-The upstream data preparation workflow (**`fgbio_v1_GRCh38`**: alignment, UMI consensus calling, VarDict/Mutect2 calling, VEP/vcf2maf annotation, fusion detection) is available at:
-<https://github.com/kunstner/UKSH_liquidbiopsy>
+The upstream data preparation workflow (**`fgbio_v1_GRCh38`**: alignment, UMI consensus calling, VarDict/Mutect2 calling, VEP/vcf2maf annotation, fusion detection) is available in this repository as well.
 
 The R scripts in this repository are the second stage of the analysis and expect the output of `fgbio_v1_GRCh38` (see [Upstream workflow](#upstream-workflow-fgbio_v1_grch38)).
 
@@ -26,7 +25,7 @@ The R scripts in this repository are the second stage of the analysis and expect
 
 ## Upstream workflow (`fgbio_v1_GRCh38`)
 
-Raw sequencing data are processed per sample by the bash workflow `fgbio_v1_GRCh38` (repository: <https://github.com/kunstner/UKSH_liquidbiopsy>), designed for libraries prepared with the SureSelect XT HS2 kit (read structure `3M2S+T 3M2S+T`) and the human reference genome **GRCh38**.
+Raw sequencing data are processed per sample by the bash workflow `fgbio_v1_GRCh38`, designed for libraries prepared with the SureSelect XT HS2 kit (read structure `3M2S+T 3M2S+T`) and the human reference genome **GRCh38**.
 
 Main steps:
 
@@ -72,7 +71,7 @@ For reproducible analyses we recommend pinning package versions, e.g. with `renv
 
 ### From the upstream workflow
 
-For each batch `<BATCH>` (e.g. `batch_a014`), the scripts expect the following under `<BATCH>/fgbio_results/<sample>/`:
+For each batch `<BATCH>` (e.g. `batch_a001`), the scripts expect the following under `<BATCH>/fgbio_results/<sample>/`:
 
 | File | Content |
 |---|---|
@@ -124,7 +123,7 @@ Adjust the corresponding paths in `10_summarize_fgbio.R` (section *Data DrugBank
 
 ### 1. Build the Panel of Normals
 
-Requires variant calls of healthy donor samples and a sample sheet (`PoN_Samples.xlsx`).
+Requires variant calls of healthy donor samples and a sample sheet (`PoN_Samples.xlsx`, columns Batch and ID required).
 
 ```bash
 Rscript 05_PanelOfNormals.R
@@ -141,10 +140,10 @@ Interactive: set `BATCHID` in `10_summarize_fgbio.R` and source the script.
 Command line (overrides `BATCHID`):
 
 ```bash
-Rscript 10_summarize_fgbio.R batch_a014
+Rscript 10_summarize_fgbio.R batch_a001
 ```
 
-Several batches:
+Several batches (e.g., batches 1 to 14):
 
 ```bash
 for i in $(seq -w 1 14); do
@@ -192,17 +191,17 @@ Written to `<BATCH>/fgbio_tables/`:
 
 If you use this code, please cite:
 
-> Feierabend S, Künstner A, et al. *A liquid biopsy-centered, pan-cancer, open next generation sequencing panel to support clinical decision-making (LION panel).* [journal, year, DOI: TODO]
+> Feierabend S, Künstner A, et al. *A liquid biopsy-centered, pan-cancer, open next generation sequencing panel to support clinical decision-making (LION panel).* [medRxiv, 2026, DOI: [TODO](https://doi.org/10.64898/2026.06.05.26354976)]
 
-Code archive: [Zenodo DOI: TODO]
+Code archive: this repository
 
-The CHIP classification is adapted from the CHIP pipeline by L. Schawe; the ACMG classification function is taken from the MIRACUM pipeline. Please acknowledge these sources accordingly.
+The CHIP classification is adapted from the CHIP pipeline by L. Schawe (@LSchawe); the ACMG classification function is taken from the MIRACUM pipeline (https://doi.org/10.3390/cancers15133456). Please acknowledge these sources accordingly.
 
 ---
 
 ## License
 
-[TODO: add license, e.g. MIT or GPL-3.0]
+This code is released under the [MIT License](LICENSE).
 
 Third-party resources (DrugBank, CHIP gene lists) are subject to their own licenses and terms of use.
 
@@ -210,4 +209,4 @@ Third-party resources (DrugBank, CHIP gene lists) are subject to their own licen
 
 ## Contact
 
-Axel Künstner, University of Lübeck
+Axel Künstner, University of Luebeck
