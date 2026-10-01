@@ -89,9 +89,9 @@ The number of files per type must be identical across all samples of a batch; th
 
 | File | Content |
 |---|---|
-| `data/Gene_list.txt` | Panel gene list (tab-delimited; columns `Gene` and `Inclusion` are required) |
-| `DB/` | CHIP gene lists (see below) |
-| `Panel_of_normal_fgbio.xlsx` | Panel of Normals, created by `05_PanelOfNormals.R` (sheets `Background` and `Noise`) |
+| `DB/Gene_list.txt` | Panel gene list (tab-delimited; columns `Gene` and `Inclusion` are required) |
+| `DB/` | CHIP gene lists and panel target regions (BED files, see below) |
+| `Panel_of_normal_fgbio.xlsx` | Panel of Normals, created by `05_PanelOfNormals.R` (sheets `Background` and `Noise`). **Not included:** the PoN depends on the cohort and processing conditions. Build your own from healthy donor samples processed with the same workflow |
 | `PoN_Samples.xlsx` | Sample sheet for the PoN (columns `ID`, `Batch`); required only for `05_PanelOfNormals.R`. **Not included: contains sample identifiers.** |
 
 ### CHIP gene lists (`DB/`)
@@ -105,6 +105,15 @@ The CHIP classification uses three gene lists (SARAH CH gene lists, v1.2):
 They are stored in the `DB/` folder. Make sure the constants `DBPATH_MCHIP`, `DBPATH_LCHIP_PATH` and `DBPATH_LCHIP_PUT` at the top of `10_summarize_fgbio.R` point to these files.
 
 Position criteria in the `CHIP_Variants` columns are interpreted as **amino acid (protein) positions** by default and are matched against `HGVSp_Short`. Only tokens with an explicit `c.` prefix are treated as cDNA positions.
+
+### Panel target regions (`DB/`)
+
+The LION panel target regions (109 genes, hybrid-capture design) are provided as BED files for both human genome builds:
+
+- `DB/LION_Panel_GRCh37.bed`
+- `DB/LION_Panel_GRCh38.bed`
+
+Use `DB/LION_Panel_GRCh38.bed` with the upstream workflow (`fgbio_v1_GRCh38`, variable `BEDFILE`), which is designed for GRCh38, or `DB/LION_Panel_GRCh37.bed` for data aligned to hg19/GRCh37. The panel was originally designed on hg19/GRCh37 and lifted over to GRCh38; the GRCh37 file is not used by any script in this repository. A complete gene list including annotated hotspot regions is provided in Supplementary Table S1 of the manuscript and in `DB/Gene_list.txt`.
 
 ### DrugBank (`DRUGDB`): must be obtained separately
 
