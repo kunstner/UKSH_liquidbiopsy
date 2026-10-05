@@ -1,4 +1,4 @@
-# LION / HiLiB: R scripts for cfDNA variant summarization
+# LION: R scripts for cfDNA variant summarization
 
 R scripts for the downstream analysis of liquid biopsy (cfDNA) sequencing data of the **LION panel** (109-gene hybrid-capture panel with UMIs). They take the output of the fgbio-based preprocessing and variant calling workflow and produce annotated, filtered per-sample variant tables, CHIP classification, surrogate tumor fraction (TF) estimates, QC summaries and plots.
 
