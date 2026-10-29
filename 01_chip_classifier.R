@@ -1,15 +1,6 @@
-# Credentials--------------------------------------------------------------
-
-#
 # CHIP Classification Functions for cfDNA Analysis Pipeline
-# Author: Axel Künstner
-# Adapted from CHIP-Pipeline by @lschawe (2025-07-22)
-
-# SPDX-License-Identifier: MIT
-# Copyright (c) 2026 Axel Künstner
-# Part of the LION panel analysis code: https://github.com/kunstner/UKSH_liquidbiopsy
-# For research use only; not validated as a medical device.
-
+# ==========================================================
+# Adapted from CHIP-Pipeline by schawe-l (2025-07-22)
 #
 # Functions
 #   load_chip_db          : load and pre-process a CHIP gene database file
@@ -179,6 +170,20 @@ load_chip_db <- function(db_path, chip_type) {
     FALSE
 }
 
+# Helper: "4-6" -> c("4","5","6"); "11" -> "11"
+.expand_num_ranges <- function(x) {
+    x |>
+        stringr::str_extract_all("[0-9]+(?:-[0-9]+)?") |>
+        unlist() |>
+        purrr::map(\(r) {
+            lim <- as.numeric(stringr::str_split_1(r, "-"))
+            as.character(seq(lim[1], lim[length(lim)]))
+        }) |>
+        unlist() |>
+        unique()
+}
+
+
 
 #' Core matching logic for a single mutation-type column
 #'
@@ -264,13 +269,12 @@ load_chip_db <- function(db_path, chip_type) {
     }
     
     # 5. Exon matching
-    if (any(stringr::str_detect(tokens, stringr::regex("exon", ignore_case = TRUE)))) {
-        crit_nums <- unlist(stringr::str_extract_all(tokens, "[0-9]+(?:-[0-9]+)?"))
-        exon_nums <- .parse_exons(exon)
-        if (any(exon_nums %in% unlist(stringr::str_extract_all(crit_nums, "[0-9]+")))) {
-            return("exon_match")
-        }
-    }
+    is_exon_tok <- stringr::str_detect(tokens, stringr::regex("exon", ignore_case = TRUE))
+	if (any(is_exon_tok)) {
+    	exon_crit <- .expand_num_ranges(tokens[is_exon_tok])
+    	exon_nums <- .parse_exons(exon)
+    	if (any(exon_nums %in% exon_crit)) return("exon_match")
+	}
     
     # 6. Explicit cDNA/codon range -- ONLY tokens carrying a "c." prefix
     c_tokens <- tokens[stringr::str_detect(tokens, stringr::regex("^c\\.", ignore_case = TRUE))]
@@ -283,7 +287,9 @@ load_chip_db <- function(db_path, chip_type) {
     
     # 7. Amino-acid position range -- DEFAULT for every other ranged token,
     #    bare ("618-836") or "p."-prefixed ("p.618-836")
-    aa_tokens <- tokens[!stringr::str_detect(tokens, stringr::regex("^c\\.", ignore_case = TRUE))]
+    aa_tokens <- tokens[!stringr::str_detect(
+    	tokens, stringr::regex("^c\\.|exon", ignore_case = TRUE)
+	)]
     aa_ranges <- unlist(stringr::str_extract_all(aa_tokens, "[0-9]+-[0-9]+"))
     if (length(aa_ranges) > 0) {
         aa_pos <- .parse_aa_pos(aa_short)
@@ -299,7 +305,7 @@ load_chip_db <- function(db_path, chip_type) {
     # 8. Exact AA / HGVSp token matching (e.g. "R337", "T615"), boundary-
     #    anchored on digits so "R337" cannot match "R3370"
     if (!is.na(aa_short) && aa_short != "") {
-        exact_tokens <- tokens[!stringr::str_detect(tokens, "-[0-9]")]
+        exact_tokens <- tokens[!stringr::str_detect(tokens, "-[0-9]") & !is_exon_tok]
         for (tok in exact_tokens) {
             # Bare frameshift hotspot tokens (e.g. "P95fs") never carry the
             # replacement residue / stop distance that real HGVS frameshift
