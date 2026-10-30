@@ -6,9 +6,9 @@ set -eo pipefail
 
 # INPUT DATA -> forward and backward read
 # BATCH=batch_a001
-# TARGET=RESOURCES
+# TARGET=$RESOURCES
 # PREFIX=liqbio_GRCh38_
-# FQDIR=RESOURCES/002_fastq/$BATCH/
+# FQDIR=$RESOURCES/002_fastq/$BATCH/
 # AF_THR=0.0005
 
 # SAMPLEID=gn_L_2024_0044
@@ -17,6 +17,7 @@ set -eo pipefail
 
 RESOURCES=PATH_TO_SOME_DIRECTORY
 ANNOTATIONS=VEP_INSTALLATION_PATH
+
 ID=$SAMPLEID
 
 echo $ID
@@ -30,46 +31,46 @@ cd $ID
 SOURCEPATH=$(pwd -LP)
 export TMPDIR=$SCRATCH/tmp; mkdir -p $TMPDIR
 
-RESULTS=RESOURCES/003_results
+RESULTS=$RESOURCES/003_results
 
 THREADS=$(nproc)
 
 # PROGRAMS
-FGBIO=RESOURCES/001_resources/fgbio-2.4.0.jar
-FASTP=RESOURCES/001_resources/fastp_0.24.0
-BWA=RESOURCES/001_resources/bwa_mem2/bwa-mem2
-GATK=RESOURCES/001_resources/gatk-4.5.0.0/gatk
-PICARD=RESOURCES/001_resources/picard.2.27.5.jar
-SVICT=RESOURCES/001_resources/svict
+FGBIO=$RESOURCES/001_resources/fgbio-2.4.0.jar
+FASTP=$RESOURCES/001_resources/fastp_0.24.0
+BWA=$RESOURCES/001_resources/bwa_mem2/bwa-mem2
+GATK=$RESOURCES/001_resources/gatk-4.5.0.0/gatk
+PICARD=$RESOURCES/001_resources/picard.2.27.5.jar
+SVICT=$RESOURCES/001_resources/svict
 
-VEP=RESOURCES/001_resources/vep.111-GRCh38_minimal.sif
-VCF2MAF=RESOURCES/001_resources/vcf2maf-1.6.22
+VEP=$RESOURCES/001_resources/vep.111-GRCh38_minimal.sif
+VCF2MAF=$RESOURCES/001_resources/vcf2maf-1.6.22
 SAMTOOLS=/usr/bin/samtools
-BCFTOOLS=RESOURCES/001_resources/bcftools-1.19/bcftools
-FACTERA=RESOURCES/001_resources/factera/factera.pl
+BCFTOOLS=$RESOURCES/001_resources/bcftools-1.19/bcftools
+FACTERA=$RESOURCES/001_resources/factera/factera.pl
 
-VARDICT=RESOURCES/001_resources/VarDict-1.8.3/bin
+VARDICT=$RESOURCES/001_resources/VarDict-1.8.3/bin
 
 # FASTAs, INDEX, ANNOTATIONS
-BWA2INDEX=RESOURCES/001_resources/BWAmem2Index/Homo_sapiens_assembly38.fasta
-REFERENCE=RESOURCES/001_resources/WholeGenomeFasta/Homo_sapiens_assembly38.fasta
-DICT=RESOURCES/001_resources/WholeGenomeFasta/Homo_sapiens_assembly38.dict
-FAI=RESOURCES/001_resources/WholeGenomeFasta/Homo_sapiens_assembly38.fasta.fai
-GENESGTF=RESOURCES/001_resources/genes_GRCh38.gtf
-GENESBED=RESOURCES/001_resources/genes_GRCh38.bed
-TWOBIT=RESOURCES/001_resources/hg38.2bit
+BWA2INDEX=$RESOURCES/001_resources/BWAmem2Index/Homo_sapiens_assembly38.fasta
+REFERENCE=$RESOURCES/001_resources/WholeGenomeFasta/Homo_sapiens_assembly38.fasta
+DICT=$RESOURCES/001_resources/WholeGenomeFasta/Homo_sapiens_assembly38.dict
+FAI=$RESOURCES/001_resources/WholeGenomeFasta/Homo_sapiens_assembly38.fasta.fai
+GENESGTF=$RESOURCES/001_resources/genes_GRCh38.gtf
+GENESBED=$RESOURCES/001_resources/genes_GRCh38.bed
+TWOBIT=$RESOURCES/001_resources/hg38.2bit
 
-ANNOPATH=ANNOTATIONS/vep/annotations_GRCh38
+ANNOPATH=$ANNOTATIONS/vep/annotations_GRCh38
 
-BEDFILE=RESOURCES/001_resources/UCCSH_NGS_panel_v1.0/UCCSH_NGS_GRCh38.bed
+BEDFILE=$RESOURCES/001_resources/UCCSH_NGS_panel_v1.0/UCCSH_NGS_GRCh38.bed
 # Interval list in Picard-style: NAME.interval_list
 REGIONLIST=uccsh_panel_grch38.interval_list
 
 # Reference Variant Files (GRCh38)
-GERMLINE=RESOURCES/001_resources/af-only-gnomad.hg38.vcf.gz
-PON=RESOURCES/001_resources/1000g_pon.hg38.vcf.gz
-DBSNP=RESOURCES/001_resources/dbsnp_146.hg38.vcf.gz
-EXAC=RESOURCES/001_resources/small_exac_common_3.hg38.vcf.gz
+GERMLINE=$RESOURCES/001_resources/af-only-gnomad.hg38.vcf.gz
+PON=$RESOURCES/001_resources/1000g_pon.hg38.vcf.gz
+DBSNP=$RESOURCES/001_resources/dbsnp_146.hg38.vcf.gz
+EXAC=$RESOURCES/001_resources/small_exac_common_3.hg38.vcf.gz
 
 # FURTHER VARIABLES
 CENTER="UzL"
